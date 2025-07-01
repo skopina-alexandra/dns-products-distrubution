@@ -10,8 +10,8 @@ done
 
 echo 'PostgreSQL started'
 
-# echo 'Running migrations...'
-# poetry run alembic upgrade head
+echo 'Running migrations...'
+poetry run alembic upgrade head
 
 
 exec "$@"
