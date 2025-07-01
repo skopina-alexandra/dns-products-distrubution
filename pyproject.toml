@@ -10,7 +10,8 @@ package-mode = false
 readme = "README.md"
 
 dependencies = [
-    "sqlalchemy (>=2.0.41,<3.0.0)"
+    "sqlalchemy (>=2.0.41,<3.0.0)",
+    "alembic (>=1.16.2,<2.0.0)"
 ]
 
 
