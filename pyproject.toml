@@ -5,8 +5,10 @@ description = "Тестовое задание"
 authors = [
     {name = "Alexandra Skopina",email = "44308291+skopina-alexandra@users.noreply.github.com"}
 ]
-readme = "README.md"
 requires-python = ">=3.12"
+package-mode = false
+readme = "README.md"
+
 dependencies = [
     "sqlalchemy (>=2.0.41,<3.0.0)"
 ]
