@@ -21,8 +21,8 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     sql = text("""
     create table dc_products(
-        dc_id uuid not null references distribution_centers(id) on delete cascade,
-        product_id uuid not null references products(product_id) on delete cascade,
+        dc_id uuid not null references distribution_centers(id) on delete restrict,
+        product_id uuid not null references products(product_id) on delete restrict,
         stock_quantity integer not null check (stock_quantity >= 0),
         reserve_quantity integer not null check (reserve_quantity >= 0),
         transit_quantity integer not null check (transit_quantity >= 0)
