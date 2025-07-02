@@ -25,6 +25,7 @@ def upgrade() -> None:
         "https://media.githubusercontent.com/media/skopina-alexandra/dns-products-distrubution/refs/heads/main/data/products.csv",
         dtype=str,
         quotechar='"',
+        encoding="cp1251",
         skipinitialspace=True,
     )
     df["Category_ID"] = df["Category_ID"].str.replace('"', "")
