@@ -47,8 +47,8 @@ def upgrade() -> None:
 
     sql_query = text(
         """
-        INSERT INTO categories (id, name)
-        VALUES (:id, :name)
+        insert into categories (id, name)
+        values (:id, :name)
         """
     )
 
@@ -63,8 +63,8 @@ def upgrade() -> None:
 
     sql_query = text(
         """
-        INSERT INTO products (product_id, category_id)
-        VALUES (:product_id, :category_id)
+        insert into products (product_id, category_id)
+        values (:product_id, :category_id)
         """
     )
     connection.execute(sql_query, data_products)
