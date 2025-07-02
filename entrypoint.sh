@@ -11,6 +11,7 @@ done
 echo 'PostgreSQL started'
 
 echo 'Running migrations...'
+poetry run alembic downgrade -1
 poetry run alembic upgrade head
 
 
