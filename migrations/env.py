@@ -7,6 +7,7 @@ from alembic import context
 
 import os
 from dotenv import load_dotenv
+from utils.db import get_database_url
 
 load_dotenv()
 
@@ -30,19 +31,9 @@ target_metadata = None
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
-def get_database_url():
-    # Обработка переменных окружения с дефолтными значениями
-    return (
-        f"postgresql+psycopg2://"
-        f"{os.environ.get('POSTGRES_DB_USER')}:"
-        f"{os.environ.get('POSTGRES_DB_PASSWORD')}@"
-        f"{os.environ.get('POSTGRES_DB_HOST')}:"
-        f"{os.environ.get('POSTGRES_DB_PORT')}/"
-        f"{os.environ.get('POSTGRES_DB_NAME')}"
-    )
-
 
 config.set_main_option("sqlalchemy.url", get_database_url())
+
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
@@ -82,9 +73,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
