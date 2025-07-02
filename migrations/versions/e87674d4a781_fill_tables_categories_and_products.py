@@ -78,6 +78,4 @@ def downgrade() -> None:
     """
     )
     connection = op.get_bind()
-    connection.execute(
-        sql,
-    )
+    connection.execute(sql)
