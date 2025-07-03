@@ -3,6 +3,7 @@ from psycopg2.extras import execute_values, DictCursor
 import logging
 
 
+# Записываем в БД собарныне значения по распределению
 def insert_into_distribution_plan(plan_values, connection):
     with connection.cursor() as cursor:
         execute_values(
@@ -19,6 +20,7 @@ def insert_into_distribution_plan(plan_values, connection):
     logging.info(f"В таблицу распределения добавлено {len(plan_values)} записей...")
 
 
+# Остатки товара в РЦ
 def get_available_dc_stock_for_product(product, connection):
     with connection.cursor(cursor_factory=DictCursor) as cursor:
         cursor.execute(
@@ -33,6 +35,7 @@ def get_available_dc_stock_for_product(product, connection):
         return available_dc
 
 
+# Распределение товаров по магазинам
 def distribute():
     connection = create_db_connection()
 
