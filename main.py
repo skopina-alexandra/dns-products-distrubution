@@ -1,3 +1,4 @@
+# from src.distribute import distribute
 from src.distribute import distribute
 
 if __name__ == "__main__":
