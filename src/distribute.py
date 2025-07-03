@@ -1,12 +1,9 @@
-from utils.db import get_database_connection_params
-import psycopg2
+from utils.db import create_db_connection
 from psycopg2.extras import execute_values, DictCursor
+import logging
 
 
-connection = psycopg2.connect(**get_database_connection_params())
-
-
-def insert_into_distribution_plan(plan_values):
+def insert_into_distribution_plan(plan_values, connection):
     with connection.cursor() as cursor:
         execute_values(
             cursor,
@@ -19,9 +16,10 @@ def insert_into_distribution_plan(plan_values):
         )
 
     connection.commit()
+    logging.info(f"В таблицу распределения добавлено {len(plan_values)} записей...")
 
 
-def get_available_dc_stock_for_product(product):
+def get_available_dc_stock_for_product(product, connection):
     with connection.cursor(cursor_factory=DictCursor) as cursor:
         cursor.execute(
             f"""
@@ -36,7 +34,10 @@ def get_available_dc_stock_for_product(product):
 
 
 def distribute():
+    connection = create_db_connection()
+
     with connection.cursor(cursor_factory=DictCursor) as cursor:
+        logging.info("Получаем дефициты товаров...")
         cursor.execute(
             """
             with
@@ -72,11 +73,15 @@ def distribute():
 
         rows = cursor.fetchmany(plan_chunk_size)
 
+        logging.info("Начинаем рспределение товаров...")
+
         while rows:
             for row in rows:
                 if product != row["product_id"]:
                     product = row["product_id"]
-                    available_dc = get_available_dc_stock_for_product(product)
+                    available_dc = get_available_dc_stock_for_product(
+                        product, connection
+                    )
 
                 shipment = min(row["demand"], available_dc)
                 available_dc -= shipment
@@ -90,10 +95,12 @@ def distribute():
                     )
 
                 if len(plan) > plan_chunk_size:
-                    insert_into_distribution_plan(plan)
+                    insert_into_distribution_plan(plan, connection)
                     plan.clear()
 
             rows = cursor.fetchmany(plan_chunk_size)
 
         if len(plan) > 0:
-            insert_into_distribution_plan(plan)
+            insert_into_distribution_plan(plan, connection)
+
+        logging.info("Распределение товаров завершено")
